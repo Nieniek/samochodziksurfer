@@ -159,11 +159,44 @@ PrefabInstance:
       propertyPath: m_Name
       value: woda
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 77334cbc284232c4a9ac1fc723490474, type: 3}
+      propertyPath: m_TagString
+      value: Water
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 77334cbc284232c4a9ac1fc723490474, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4524410639155266683}
   m_SourcePrefab: {fileID: 100100000, guid: 77334cbc284232c4a9ac1fc723490474, type: 3}
+--- !u!1 &7303859663605166171 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 77334cbc284232c4a9ac1fc723490474, type: 3}
+  m_PrefabInstance: {fileID: 7610498959532903690}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &4524410639155266683
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7303859663605166171}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.028221978, y: 0.02723757, z: 0.000055492357}
+  m_Center: {x: -0.0013641668, y: -0.00056361506, z: 0.000027746179}
 --- !u!4 &7932902753847552737 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 77334cbc284232c4a9ac1fc723490474, type: 3}

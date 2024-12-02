@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     private CharacterController controller;
     private Vector3 direction;
+    public float forwardSpeed = 10f;
 
     private int desiredLane = 1; // 0 = lewy, 1 = œrodek, 2 = prawy
     public float laneDistance = 4f; // Odleg³oœæ miêdzy pasami
@@ -17,8 +18,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        // Wyzerowanie ruchu w osi Z, aby samochód nie porusza³ siê do przodu
-        direction.z = 0;
+        // Ustawienie ruchu do przodu
+        direction.z = forwardSpeed;
 
         // Obs³uga wejœcia gracza do zmiany pasa
         if (Input.GetKeyDown(KeyCode.RightArrow))
@@ -44,11 +45,9 @@ public class PlayerController : MonoBehaviour
         // Przesuniêcie gracza w kierunku docelowej pozycji
         Vector3 moveVector = Vector3.zero;
         moveVector.x = (targetPosition.x - transform.position.x) * 10f; // Interpolacja osi X
-        moveVector.y = direction.y; // Uwzglêdnienie grawitacji lub skoków, jeœli istniej¹
+       
 
-        // Brak ruchu w osi Z
-        moveVector.z = 0;
-
+       
         controller.Move(moveVector * Time.fixedDeltaTime);
     }
 }
