@@ -8,90 +8,78 @@ public class PlayerController : MonoBehaviour
     private Vector3 direction;
 
     private int desiredLane = 1; // 0 = lewy, 1 = œrodek, 2 = prawy
-    public float laneDistance = 4f; // Odleg³oœæ miêdzy pasami
+    public float laneDistance = 2f; // Odleg³oœæ miêdzy pasami (wartoœci: -2, 0, 2)
 
+    public float laneSwitchSpeed = 10f; // Szybkoœæ zmiany pasa
     private bool isReversingControls = false; // Czy sterowanie jest odwrócone?
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        if (controller == null)
+        {
+            Debug.LogError("Brak komponentu CharacterController na obiekcie gracza!");
+        }
     }
 
     void Update()
     {
-        // Wyzerowanie ruchu w osi Z, aby samochód nie porusza³ siê do przodu
-        direction.z = 0;
-
-        // Obs³uga wejœcia gracza do zmiany pasa
+        // Sterowanie gracza do zmiany pasów
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             if (isReversingControls)
-            {
-                // Odwrócone sterowanie: prawo na lewo
-                desiredLane--;
-                if (desiredLane < 0)
-                    desiredLane = 0; // Ogranicz gracza do lewego pasa
-            }
+                desiredLane-=1; // Odwrócone sterowanie
             else
-            {
-                // Normalne sterowanie
-                desiredLane++;
-                if (desiredLane > 2)
-                    desiredLane = 2; // Ogranicz gracza do prawego pasa
-            }
+                desiredLane+=1;
+
+            desiredLane = Mathf.Clamp(desiredLane, 0,2); // Ogranicz do trzech pasów
         }
+
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             if (isReversingControls)
-            {
-                // Odwrócone sterowanie: lewo na prawo
-                desiredLane++;
-                if (desiredLane > 2)
-                    desiredLane = 2; // Ogranicz gracza do prawego pasa
-            }
+                desiredLane+=1;
             else
-            {
-                // Normalne sterowanie
-                desiredLane--;
-                if (desiredLane < 0)
-                    desiredLane = 0; // Ogranicz gracza do lewego pasa
-            }
+                desiredLane-=1;
+
+            desiredLane = Mathf.Clamp(desiredLane, 0,2); // Ogranicz do trzech pasów
         }
     }
 
     void FixedUpdate()
     {
-        // Oblicz pozycjê docelow¹
-        Vector3 targetPosition = transform.position;
-        targetPosition.x = (desiredLane - 1) * laneDistance; // Pozycje: -laneDistance, 0, laneDistance
+        // Obliczenie pozycji docelowej w oparciu o pas
+        float targetX = (desiredLane - 1) * laneDistance; // Pozycje pasów: -2, 0, 2
+        Vector3 targetPosition = new Vector3(targetX, transform.position.y, transform.position.z);
 
-        // Przesuniêcie gracza w kierunku docelowej pozycji
-        Vector3 moveVector = Vector3.zero;
-        moveVector.x = (targetPosition.x - transform.position.x) * 10f; // Interpolacja osi X
-        moveVector.y = direction.y; // Uwzglêdnienie grawitacji lub skoków, jeœli istniej¹
+        // P³ynna interpolacja do docelowej pozycji
+        Vector3 moveVector = Vector3.Lerp(transform.position, targetPosition, Time.fixedDeltaTime * laneSwitchSpeed);
 
-        // Brak ruchu w osi Z
-        moveVector.z = 0;
-
-        controller.Move(moveVector * Time.fixedDeltaTime);
+        // Przesuniêcie za pomoc¹ CharacterController
+        Vector3 deltaMove = moveVector - transform.position; // Oblicz ró¿nicê przesuniêcia
+        controller.Move(deltaMove);
     }
 
-    // Sprawdzenie kolizji z wod¹
     private void OnTriggerEnter(Collider other)
     {
+        if (other.CompareTag("Obstacle")) // Zak³adamy, ¿e samochody maj¹ tag "Obstacle"
+        {
+            Debug.Log("Kolizja z samochodem! Gra zatrzymana.");
+            Time.timeScale = 0; // Zatrzymanie gry
+        }
+
         if (other.CompareTag("Water"))
         {
-            StartCoroutine(ReverseControlsForFiveSeconds()); // Odwracamy sterowanie na 5 sek
+            StartCoroutine(ReverseControlsForFiveSeconds()); // Odwrócone sterowanie
             Debug.Log("Wjecha³eœ w wodê, sterowanie odwrócone!");
         }
     }
 
-    // Korutyna odwracaj¹ca sterowanie na 5 sekund
     private IEnumerator ReverseControlsForFiveSeconds()
     {
         isReversingControls = true;
-        yield return new WaitForSeconds(5f); // Czekaj przez 5 sekund
-        isReversingControls = false; // Przywróæ normalne sterowanie po 5 sekundach
+        yield return new WaitForSeconds(5f);
+        isReversingControls = false;
         Debug.Log("Sterowanie wróci³o do normy.");
     }
 }
