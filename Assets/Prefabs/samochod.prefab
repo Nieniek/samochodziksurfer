@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7104960028631550908}
   - component: {fileID: 2627271432582709384}
   - component: {fileID: -5030251716466502959}
+  - component: {fileID: -887273937416638950}
   m_Layer: 0
   m_Name: samochod
   m_TagString: car
@@ -82,6 +83,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &-887273937416638950
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6259281639008417964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d35392cac10684f8ed175f3f6d84a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1593738204760407268
 PrefabInstance:
   m_ObjectHideFlags: 0
